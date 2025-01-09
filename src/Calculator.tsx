@@ -28,7 +28,7 @@ const Calculator = () => {
 
             const negatives = numbers.filter((num) => num < 0);
             if (negatives.length > 0) {
-                setError("Negative numbers not allowed")
+                setError("Negative numbers are not allowed")
             }
 
             result = numbers.reduce((sum, num) => sum + (isNaN(num) ? NaN : num), 0);
@@ -60,7 +60,7 @@ const Calculator = () => {
 
                 {
                     error ? (
-                        <Text style={styles.headingText}>
+                        <Text style={[styles.headingText,{  color: "#A31D1D",}]}>
                             Error : {error}
                         </Text>
                     ) : (
