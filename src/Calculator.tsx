@@ -5,13 +5,39 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-nativ
 const Calculator = () => {
     const [input, setInput] = useState<string>('');
     const [result, setResult] = useState<number>(0);
+    const [error, setError] = useState<string>('');
 
     const handlePress = (value: string) => {
-        if (value == "")  {
-            setResult(0)
+        setError("")
+        let result = 0
+        if (!value) {
+            setResult(result)
         } else {
-            setResult(Number(value))
+            let delimiter = /,|\n/;
+            let numbersString = value;
+
+            if (value.startsWith("//")) {
+                const delimiterMatch = value.match(/^\/\/(.+)\n/);
+                if (delimiterMatch) {
+                    delimiter = new RegExp(delimiterMatch[1]);
+                    numbersString = value.split("\n").slice(1).join("\n");
+                }
+            }
+
+            const numbers = numbersString.split(delimiter).map((num) => parseInt(num, 10));
+
+            const negatives = numbers.filter((num) => num < 0);
+            if (negatives.length > 0) {
+                setError("Negative numbers not allowed")
+            }
+
+            result = numbers.reduce((sum, num) => sum + (isNaN(num) ? NaN : num), 0);
+            setResult(result)
         }
+
+
+
+
     }
 
     return (
@@ -27,13 +53,23 @@ const Calculator = () => {
                 />
                 <TouchableOpacity
                     style={styles.buttonContainer}
-                    onPress={() =>handlePress(input)}
+                    onPress={() => handlePress(input)}
                 >
                     <Text style={styles.buttonText}>Result</Text>
                 </TouchableOpacity>
-                <Text style={styles.headingText}>
-                   Result : {result}
-                </Text>
+
+                {
+                    error ? (
+                        <Text style={styles.headingText}>
+                            Error : {error}
+                        </Text>
+                    ) : (
+                        <Text style={styles.headingText}>
+                            Result : {result}
+                        </Text>
+                    )
+                }
+
             </View>
 
         </View>
