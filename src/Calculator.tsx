@@ -3,11 +3,15 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 
 const Calculator = () => {
-    const [input, setInput] = useState('');
-    const [result, setResult] = useState('');
+    const [input, setInput] = useState<string>('');
+    const [result, setResult] = useState<number>(0);
 
     const handlePress = (value: string) => {
-        setResult(value)
+        if (value == "")  {
+            setResult(0)
+        } else {
+            setResult(Number(value))
+        }
     }
 
     return (
